@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بث المباريات - أسامة</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+  <header class="bg-gray-800 p-4 shadow flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <img src="https://via.placeholder.com/40x40?text=🅾️" alt="Osama Logo" class="rounded-full">
+      <h1 class="text-2xl font-bold">📺 موقع بث المباريات - أسامة</h1>
+    </div>
+    <nav class="space-x-4">
+      <a href="#" class="hover:underline">الرئيسية</a>
+      <a href="#archive" class="hover:underline">الأرشيف</a>
+      <a href="#admin" class="hover:underline">لوحة التحكم</a>
+    </nav>
+  </header>
+
+  <main class="p-6 space-y-10">
+    <section class="bg-gray-800 p-4 rounded-xl shadow">
+      <h2 class="text-xl font-semibold mb-2">🎥 شاهد البث المباشر</h2>
+      <video id="video" class="w-full rounded-lg" controls></video>
+      <input id="urlInput" type="text" placeholder="ضع رابط m3u8 هنا" class="mt-4 w-full p-2 rounded text-black">
+      <button onclick="loadStream()" class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">تشغيل</button>
+    </section>
+
+    <section class="bg-gray-800 p-4 rounded-xl shadow">
+      <h2 class="text-xl font-semibold mb-2">ℹ️ نبذة عن الموقع</h2>
+      <p>هذا الموقع تم تطويره بواسطة أسامة لتشغيل روابط البث المباشر للمباريات بصيغة .m3u8 و .ts بسهولة وبواجهة احترافية.</p>
+    </section>
+
+    <section id="archive" class="bg-gray-800 p-4 rounded-xl shadow">
+      <h2 class="text-xl font-semibold mb-2">📁 أرشيف المباريات</h2>
+      <ul id="archiveList" class="list-disc pl-6 space-y-1">
+        <li><a href="#" class="text-blue-400 underline">مباراة الأهلي × الزمالك - 2024</a></li>
+        <li><a href="#" class="text-blue-400 underline">مباراة ليفربول × ريال مدريد - 2023</a></li>
+      </ul>
+    </section>
+
+    <section id="admin" class="bg-gray-800 p-4 rounded-xl shadow">
+      <h2 class="text-xl font-semibold mb-2">🛠️ لوحة التحكم - إضافة روابط</h2>
+      <input id="archiveTitle" type="text" placeholder="اسم المباراة" class="w-full p-2 rounded text-black mb-2">
+      <input id="archiveLink" type="text" placeholder="رابط المباراة" class="w-full p-2 rounded text-black mb-2">
+      <button onclick="addToArchive()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">إضافة إلى الأرشيف</button>
+    </section>
+  </main>
+
+  <footer class="bg-gray-800 text-center p-4 mt-10">
+    <p>📧 تواصل معنا: <a href="mailto:osama@example.com" class="underline text-blue-400">osama@example.com</a></p>
+  </footer>
+
+  <script>
+    function loadStream() {
+      const video = document.getElementById('video');
+      const streamUrl = document.getElementById('urlInput').value;
+
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+      } else {
+        alert('المتصفح لا يدعم تشغيل هذه الصيغة.');
+      }
+    }
+
+    function addToArchive() {
+      const title = document.getElementById('archiveTitle').value;
+      const link = document.getElementById('archiveLink').value;
+      if (title && link) {
+        const ul = document.getElementById('archiveList');
+        const li = document.createElement('li');
+        li.innerHTML = `<a href="${link}" class="text-blue-400 underline">${title}</a>`;
+        ul.appendChild(li);
+        document.getElementById('archiveTitle').value = '';
+        document.getElementById('archiveLink').value = '';
+      } else {
+        alert('يرجى إدخال اسم المباراة والرابط.');
+      }
+    }
+  </script>
+</body>
+</html>
